@@ -1,15 +1,16 @@
 from bs4 import BeautifulSoup as BSoup
+from urllib.parse import quote
 import requests
 import re
 
 to_find = input('Введите тематику книг: ')
 to_find = to_find.replace(' ', '+')
-URL = 'https://allfind.kpfu.ru/Search/Results?lookfor={}&type=AllFields'.format(to_find)
+URL = 'https://allfind.kpfu.ru/Search/Results?lookfor={}&type=AllFields'.format(quote(to_find))
 
 response = requests.get(URL)
 soup = BSoup(response.text, 'html.parser')
-
-for book in soup.find_all('div', {'class': 'result clearfix'}):
+books = soup.find_all('div', {'class': 'result clearfix'})
+for book in books:
     block = book.find('div', {'class': 'record-title'}).find('a')
     response = requests.get('https://allfind.kpfu.ru' + block['href'] + '/Holdings#tabnav')
     soup = BSoup(response.text, 'html.parser')
@@ -39,5 +40,5 @@ for book in soup.find_all('div', {'class': 'result clearfix'}):
         else:
             print('Не доступно')
     print()
-else:
+if not books:
     print('По данному запросу ничего не найденно!')
