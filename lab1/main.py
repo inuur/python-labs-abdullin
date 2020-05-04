@@ -33,8 +33,4 @@ for institute in soup.find_all('a', text=re.compile('(.+)?[Ии]нститут (
         if soup.find_all('a', text=re.compile('(.+)?Кафед[рp]а(.+)?')):
             print(soup.find_all('a', text=re.compile('(.+)?Кафед[рp]а(.+)?')))
             continue
-    print('Not FOUND')
 
-
-def get_cafedras(link):
-    pass
